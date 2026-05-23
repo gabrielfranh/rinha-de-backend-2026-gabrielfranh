@@ -1,0 +1,7 @@
+{
+    "participants": ["Gabriel Francisco Habermann"],
+    "social": ["https://github.com/gabrielfranh", "https://linkedin.com/in/gabrielfranh"],
+    "source-code-repo": "https://github.com/gabrielfranh/rinha-de-backend-2026-gabrielfranh",
+    "stack": ["csharp", "dotnet10", "qdrant", "nginx"],
+    "open_to_work": false
+}

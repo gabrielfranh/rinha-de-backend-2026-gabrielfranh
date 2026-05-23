@@ -1,0 +1,63 @@
+services:
+  fraud_api_1:
+    image: gabrielfranh/fraudapi:latest
+    depends_on:
+      qdrant:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - Qdrant__Host=qdrant
+      - Qdrant__Port=6334
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "75MB"
+
+  fraud_api_2:
+    image: gabrielfranh/fraudapi:latest
+    depends_on:
+      qdrant:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - Qdrant__Host=qdrant
+      - Qdrant__Port=6334
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: "75MB"
+
+  qdrant:
+    image: qdrant/qdrant
+    healthcheck:
+      test: ["CMD-SHELL", "timeout 1 bash -c 'cat < /dev/null > /dev/tcp/localhost/6333'"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    volumes:
+      - qdrant_data:/qdrant/storage
+    deploy:
+      resources:
+        limits:
+          cpus: "0.4"
+          memory: "150MB"
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "9999:9999"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - fraud_api_1
+      - fraud_api_2
+    deploy:
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: "50MB"
+
+volumes:
+  qdrant_data:
