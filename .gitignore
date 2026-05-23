@@ -1,0 +1,28 @@
+bin/
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+
+# Dataset
+**/Resources/references.json
+
+# Build outputs
+**/bin/
+**/obj/
+
+# Rider/JetBrains
+.idea/
+*.user
+
+# dotnet
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Logs
+*.log
+
+# Environment
+.env
