@@ -17,6 +17,9 @@ public class KnnFraudClassifier(ITransactionVectorRepository repository) : IKnnF
     {
         var neighbors = await repository.FindKNearestAsync(normalizedArray, K);
 
+        if (neighbors.Count == 0)
+            return new BaseResponseDto(Approved: true, FraudScore: 0.0);
+
         var fraudCount = neighbors.Count(n =>
             n.Payload.TryGetValue("is_fraud", out var value) && value.BoolValue);
 
