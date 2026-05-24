@@ -1,3 +1,4 @@
+using Grpc.Core;
 using Qdrant.Client;
 using Qdrant.Client.Grpc;
 
@@ -10,11 +11,13 @@ public class QdrantCollectionInitializer(QdrantClient client, QdrantConfiguratio
         var exists = await client.CollectionExistsAsync(configuration.CollectionName);
         if (exists) return;
 
-        await client.CreateCollectionAsync(configuration.CollectionName,
-            new VectorParams
-            {
-                Size = 14,
-                Distance = Distance.Cosine
-            });
+        try
+        {
+            await client.CreateCollectionAsync(configuration.CollectionName,
+                new VectorParams { Size = 14, Distance = Distance.Cosine });
+        }
+        catch (RpcException ex) when (ex.StatusCode == StatusCode.AlreadyExists)
+        {
+        }
     }
 }

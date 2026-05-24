@@ -57,14 +57,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
 var initializer = app.Services.GetRequiredService<QdrantCollectionInitializer>();
 await initializer.InitializeAsync();
 
-var seeder = app.Services.GetRequiredService<QdrantSeeder>();
-var datasetPath = Path.Combine(AppContext.BaseDirectory, "Resources", "references.json");
-await seeder.SeedAsync(datasetPath);
+var runSeeder = Environment.GetEnvironmentVariable("RUN_SEEDER") == "true";
+
+if (runSeeder)
+{
+    var seeder = app.Services.GetRequiredService<QdrantSeeder>();
+    var datasetPath = Path.Combine(AppContext.BaseDirectory, "Resources", "references.json");
+    await seeder.SeedAsync(datasetPath);
+}
 
 app.MapGet("/ready", () => Results.Ok())
 .WithName("Ready");

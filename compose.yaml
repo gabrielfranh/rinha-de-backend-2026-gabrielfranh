@@ -11,11 +11,12 @@
       - ASPNETCORE_URLS=http://+:8080
       - Qdrant__Host=qdrant
       - Qdrant__Port=6334
+      - RUN_SEEDER=true
     deploy:
       resources:
         limits:
-          cpus: "0.25"
-          memory: "75MB"
+          cpus: "0.3"
+          memory: "120MB"
 
   fraud_api_2:
     image: fraudapi
@@ -29,11 +30,12 @@
       - ASPNETCORE_URLS=http://+:8080
       - Qdrant__Host=qdrant
       - Qdrant__Port=6334
+      - RUN_SEEDER=false
     deploy:
       resources:
         limits:
           cpus: "0.25"
-          memory: "75MB"
+          memory: "80MB"
 
   qdrant:
     image: qdrant/qdrant
@@ -47,8 +49,8 @@
     deploy:
       resources:
         limits:
-          cpus: "0.4"
-          memory: "150MB"
+          cpus: "0.3"
+          memory: "120MB"
 
   nginx:
     image: nginx:alpine
@@ -62,8 +64,8 @@
     deploy:
       resources:
         limits:
-          cpus: "0.1"
-          memory: "50MB"
+          cpus: "0.15"
+          memory: "30MB"
 
 volumes:
   qdrant_data:
